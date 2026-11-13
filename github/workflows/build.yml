@@ -1,16 +1,16 @@
-name: Compilar projeto Android
+
+name: Compilar SURF HACK
 
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Baixar arquivos
+      - name: Baixar projeto
         uses: actions/checkout@v4
 
       - name: Instalar Java
@@ -22,14 +22,17 @@ jobs:
       - name: Extrair projeto
         run: unzip SURF_HACK_Android_Project.zip -d projeto
 
-      - name: Compilar APK
-        run: |
-          cd projeto
-          chmod +x gradlew
-          ./gradlew assembleDebug
+      - name: Preparar Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
 
-      - name: Salvar APK
+      - name: Gerar APK
+        run: gradle -p projeto :app:assembleDebug
+
+      - name: Disponibilizar APK
         uses: actions/upload-artifact@v4
         with:
           name: SURF-HACK-APK
-          path: projeto/**/build/outputs/apk/debug/*.apk
+          path: projeto/app/build/outputs/apk/debug/app-debug.apk
+
