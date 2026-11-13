@@ -1,14 +1,15 @@
-
 name: Compilar SURF HACK
 
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Baixar projeto
         uses: actions/checkout@v4
